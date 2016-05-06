@@ -31,6 +31,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 public class TechnicianSimulator implements Runnable {
     private String technicianId;
+    private String targetIP;
     private String ipaddress;
     private String port;
     private String origin;
@@ -44,12 +45,13 @@ public class TechnicianSimulator implements Runnable {
     private List<TechnicianDestination> techDestinationList = new ArrayList<TechnicianDestination>();
     private String externalCommand;
     
-    public TechnicianSimulator(String technicianId, String ipaddress, String port) {
-        initialize(technicianId, ipaddress, port);
+    public TechnicianSimulator(String technicianId, String targetIP, String ipaddress, String port) {
+        initialize(technicianId, targetIP, ipaddress, port);
     }
     
-    public void initialize(String technicianId, String ipaddress, String port){
+    public void initialize(String technicianId, String targetIP, String ipaddress, String port){
         this.technicianId = technicianId;
+        this.targetIP = targetIP;
         this.ipaddress = ipaddress;
         this.port = port;
         externalCommand = "none";
@@ -140,7 +142,7 @@ public class TechnicianSimulator implements Runnable {
         //technicianSpout.enqueueEvent(technicianStatus);
         
         try{
-        	URL url = new URL("http://localhost:8082/contentListener");
+        	URL url = new URL("http://" + targetIP + ":8082/contentListener");
     		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
     		conn.setDoOutput(true);
     		conn.setRequestMethod("POST");

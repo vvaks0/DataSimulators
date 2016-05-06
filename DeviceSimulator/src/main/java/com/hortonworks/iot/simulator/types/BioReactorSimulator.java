@@ -22,6 +22,7 @@ import com.hortonworks.iot.simulator.events.STBStatus;
 
 public class BioReactorSimulator  implements Runnable {
     private String serialNumber;
+    private String targetIP;
     private String state; 
     private String status;
     private String mode;
@@ -44,13 +45,14 @@ public class BioReactorSimulator  implements Runnable {
     
     Random random = new Random();
     
-    public BioReactorSimulator(String deviceSerialNumber, String mode){
-        initialize(deviceSerialNumber, mode);    
+    public BioReactorSimulator(String deviceSerialNumber, String mode, String tragetIP){
+        initialize(deviceSerialNumber, mode, tragetIP);    
     }
     
-    public void initialize(String deviceSerialNumber, String mode){
-    	serialNumber = deviceSerialNumber; //deviceSpout.getSerialNumber();
-        volume = 200000; //Measured in MiliLiters
+    public void initialize(String deviceSerialNumber, String mode, String targetIP){
+    	this.serialNumber = deviceSerialNumber; //deviceSpout.getSerialNumber();
+        this.targetIP = targetIP;
+    	volume = 200000; //Measured in MiliLiters
         initialCellConcentration = 300000;
         state = "off";
         status = "normal";
@@ -227,7 +229,7 @@ public class BioReactorSimulator  implements Runnable {
         bioReactorStatus.setCellsPerML(cellsPerML);
         
         try{
-        	URL url = new URL("http://localhost:8082/contentListener");
+        	URL url = new URL("http://" + targetIP +":8082/contentListener");
     		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
     		conn.setDoOutput(true);
     		conn.setRequestMethod("POST");

@@ -131,9 +131,15 @@ public class Simulator {
 	public static void main(String[] args) throws IOException {
 		Thread deviceThread;
 		Thread techThread;
+		String targetIP;
 		String simType = args[0];
 		String serialNumber = args[1];
 		String mode = args[2];
+		if(args.length > 3){	
+			targetIP = args[3];
+		}else{
+			targetIP = "sandbox.hortonworks.com";
+		}
 		System.out.println("Starting Cache...");
 		CacheManager.create();
 		CacheManager.getInstance().addCache("TechnicianRouteRequest");
@@ -144,7 +150,7 @@ public class Simulator {
 			server.start();
 			System.out.println("Starting Set Top Box...");
 			Map networkInfo = getNetworkInfo(serialNumber, simType);
-			STBSimulator stb = new STBSimulator(serialNumber, mode);
+			STBSimulator stb = new STBSimulator(serialNumber, mode, targetIP);
             deviceThread = new Thread(stb);
             deviceThread.setName("Device: " + serialNumber);
             deviceThread.start();
@@ -157,7 +163,7 @@ public class Simulator {
 			Map networkInfo = getNetworkInfo(serialNumber, simType);
 			ipaddress =  (String)networkInfo.get("ipaddress");
 			port =  (String)networkInfo.get("port");
-			TechnicianSimulator tech = new TechnicianSimulator(serialNumber, ipaddress, port);
+			TechnicianSimulator tech = new TechnicianSimulator(serialNumber, targetIP, ipaddress, port);
             techThread = new Thread(tech);
             techThread.setName("Technician: " + serialNumber);
             techThread.start();
@@ -195,7 +201,7 @@ public class Simulator {
 			ipaddress =  (String)networkInfo.get("ipaddress");
 			port =  (String)networkInfo.get("port");
 			//BioReactorSimulator bioReactor = new BioReactorSimulator(serialNumber, ipaddress, port);
-			BioReactorSimulator bioReactor = new BioReactorSimulator(serialNumber, mode);
+			BioReactorSimulator bioReactor = new BioReactorSimulator(serialNumber, mode, targetIP);
 			deviceThread = new Thread(bioReactor);
 			deviceThread.setName("BioReactor: " + serialNumber);
 			deviceThread.start();
@@ -208,7 +214,7 @@ public class Simulator {
 			ipaddress =  (String)networkInfo.get("ipaddress");
 			port =  (String)networkInfo.get("port");
 			//BioReactorSimulator bioReactor = new BioReactorSimulator(serialNumber, ipaddress, port);
-			FiltrationSystemSimulator filtartionSystem = new FiltrationSystemSimulator(serialNumber, mode);
+			FiltrationSystemSimulator filtartionSystem = new FiltrationSystemSimulator(serialNumber, mode, targetIP);
 			deviceThread = new Thread(filtartionSystem);
 			deviceThread.setName("Filtration System: " + serialNumber);
 			deviceThread.start();

@@ -14,6 +14,7 @@ import com.hortonworks.iot.simulator.events.STBStatus;
 
 public class STBSimulator implements Runnable {
     private String serialNumber;
+    private String targetIP;
     private String state; 
     private String status;
     private String mode;
@@ -25,8 +26,8 @@ public class STBSimulator implements Runnable {
     
     Random random = new Random();
     
-    public STBSimulator(String deviceSerialNumber, String mode){
-        initialize(deviceSerialNumber, mode);    
+    public STBSimulator(String deviceSerialNumber, String mode, String targetIP){
+        initialize(deviceSerialNumber, mode, targetIP);    
     }
     
     public void run() {
@@ -75,8 +76,9 @@ public class STBSimulator implements Runnable {
 		}
     }
     
-    public void initialize(String deviceSerialNumber, String mode){
-        serialNumber = deviceSerialNumber; //deviceSpout.getSerialNumber();
+    public void initialize(String deviceSerialNumber, String mode, String targetIP){
+        this.serialNumber = deviceSerialNumber; //deviceSpout.getSerialNumber();
+        this.targetIP = targetIP;
         state = "off";
         status = "normal";
         signalStrength = 85;
@@ -101,7 +103,7 @@ public class STBSimulator implements Runnable {
         stbStatus.setSignalStrength(signalStrength);
         
         try{
-        	URL url = new URL("http://localhost:8082/contentListener");
+        	URL url = new URL("http://" + targetIP + ":8082/contentListener");
     		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
     		conn.setDoOutput(true);
     		conn.setRequestMethod("POST");

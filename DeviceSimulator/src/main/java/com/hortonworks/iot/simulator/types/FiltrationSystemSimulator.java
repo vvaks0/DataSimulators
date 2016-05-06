@@ -14,6 +14,7 @@ import com.hortonworks.iot.simulator.events.FiltrationStatus;
 
 public class FiltrationSystemSimulator implements Runnable {
     private String serialNumber;
+    private String targetIP;
     private String state; 
     private String status;
     private String mode;
@@ -28,8 +29,8 @@ public class FiltrationSystemSimulator implements Runnable {
     
     Random random = new Random();
     
-    public FiltrationSystemSimulator(String deviceSerialNumber, String mode){
-        initialize(deviceSerialNumber, mode);    
+    public FiltrationSystemSimulator(String deviceSerialNumber, String mode, String targetIP){
+        initialize(deviceSerialNumber, mode, targetIP);    
     }
     
     public void run() {
@@ -78,8 +79,9 @@ public class FiltrationSystemSimulator implements Runnable {
 		}
     }
     
-    public void initialize(String deviceSerialNumber, String mode){
-        serialNumber = deviceSerialNumber; //deviceSpout.getSerialNumber();
+    public void initialize(String deviceSerialNumber, String mode, String targetIP){
+        this.serialNumber = deviceSerialNumber; //deviceSpout.getSerialNumber();
+        this.targetIP = targetIP;
         state = "off";
         status = "normal";
         setInternalPressure(20);
@@ -110,7 +112,7 @@ public class FiltrationSystemSimulator implements Runnable {
     	//filtrationStatus.setBatchNumber(batchNumber);
 
         try{
-        	URL url = new URL("http://localhost:8082/contentListener");
+        	URL url = new URL("http://" + targetIP +":8082/contentListener");
     		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
     		conn.setDoOutput(true);
     		conn.setRequestMethod("POST");

@@ -26,7 +26,9 @@ import com.hortonworks.iot.simulator.events.ProgramGuide;
 import com.hortonworks.iot.simulator.events.Station;
 import com.hortonworks.iot.simulator.types.BioReactorSimulator;
 import com.hortonworks.iot.simulator.types.FiltrationSystemSimulator;
+import com.hortonworks.iot.simulator.types.RetailStoreSimulator;
 import com.hortonworks.iot.simulator.types.STBSimulator;
+import com.hortonworks.iot.simulator.types.SocialMediaEmulator;
 import com.hortonworks.iot.simulator.types.TechnicianSimulator;
 import com.hortonworks.iot.simulator.types.X1TunerSimulator;
 
@@ -57,6 +59,9 @@ public class Simulator {
     	}
     	else if(simType.equalsIgnoreCase("FiltrationSystem")){
     		config = new ResourceConfig(TechnicianService.class);
+    	}
+    	else if(simType.equalsIgnoreCase("RetailStore")){
+    		config = new ResourceConfig(RetailStoreSimulator.class);
     	}
     	else{
     		System.exit(1);
@@ -118,7 +123,18 @@ public class Simulator {
 			break;
 		case "FiltrationSystem 3000":
 			deviceNetworkInfoMap.put("port", "8072");
+		 	break;
+		case "RetailStore 1000":
+			deviceNetworkInfoMap.put("port", "8073");
 			break;
+		case "RetailStore 2000":
+			deviceNetworkInfoMap.put("port", "8074");
+			break;
+		case "RetailStore 3000":
+			deviceNetworkInfoMap.put("port", "8075");
+			break;
+		case "SocialMedia 1000":
+			break;	
 		default:
 			System.out.println("There is no record of " + simType + " " + deviceId + ". Cannot start device simulation");
 			System.exit(1);
@@ -218,50 +234,32 @@ public class Simulator {
 			deviceThread = new Thread(filtartionSystem);
 			deviceThread.setName("Filtration System: " + serialNumber);
 			deviceThread.start();
+        }else if(simType.equalsIgnoreCase("RetailStore")){			
+			System.out.println("Starting Webservice...");
+			final HttpServer server = startServer(simType, serialNumber);
+			server.start();
+			System.out.println("Starting Retail Store Simulation...");
+			Map networkInfo = getNetworkInfo(serialNumber, simType);
+			ipaddress =  (String)networkInfo.get("ipaddress");
+			port =  (String)networkInfo.get("port");
+			
+			RetailStoreSimulator retailStore = new RetailStoreSimulator(serialNumber, mode, targetIP);
+			deviceThread = new Thread(retailStore);
+			deviceThread.setName("Retail Store: " + serialNumber);
+			deviceThread.start();
+        }else if(simType.equalsIgnoreCase("SocialMedia")){			
+			System.out.println("Starting Webservice...");
+			//final HttpServer server = startServer(simType, serialNumber);
+			//server.start();
+			System.out.println("Starting Social Media Emulator...");
+			Map networkInfo = getNetworkInfo(serialNumber, simType);
+			ipaddress =  (String)networkInfo.get("ipaddress");
+			port =  (String)networkInfo.get("port");
+			
+			SocialMediaEmulator socialMedia = new SocialMediaEmulator(serialNumber, mode, targetIP);
+			deviceThread = new Thread(socialMedia);
+			deviceThread.setName("Social Media Emulator: " + serialNumber);
+			deviceThread.start();
         }
     }
-	
-    /*
-    public static Map<String,String> getSimulationDetails(String simType, String deviceId){
-    	Map<String,String> deviceDetailsMap = new HashMap<String, String>();
-    	Configuration config = HBaseConfiguration.create();
-		config.set("hbase.zookeeper.quorum", "localhost");
-		config.set("hbase.zookeeper.property.clientPort", "2181");
-		config.set("zookeeper.znode.parent", "/hbase-unsecure");
-		
-		//System.out.println("Create Config...");
-	    // Instantiating HTable class
-	    HTable table = null;
-		try {
-			table = new HTable(config, "DeviceDetails");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	    //System.out.println("Get Table...");
-	    // Instantiating Get class
-	    Get get = new Get(Bytes.toBytes(deviceId));
-	    System.out.println("Build Request...");
-	    // Reading the data
-	    Result result = null;
-		try {
-			result = table.get(get);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	    //System.out.println("Get Results...");
-	    // Reading values from Result class object
-		
-		if(result.getValue(Bytes.toBytes("cf"),Bytes.toBytes("ipaddress")) !=null && result.getValue(Bytes.toBytes("cf"),Bytes.toBytes("port")) != null){
-			byte [] ipaddress = result.getValue(Bytes.toBytes("cf"),Bytes.toBytes("ipaddress"));
-			byte [] port = result.getValue(Bytes.toBytes("cf"),Bytes.toBytes("port"));
-			deviceDetailsMap.put("ipaddress", ipaddress.toString());
-			deviceDetailsMap.put("port", port.toString());
-			
-			return deviceDetailsMap;
-		}
-		else{
-			System.out.println("There is no record of Device " + deviceId + " in HBase. Cannot start device simulation");
-			return null;
-		}
-    } */
 }

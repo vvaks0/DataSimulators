@@ -81,7 +81,7 @@ public class SocialMediaEmulator implements Runnable {
     	
     	socialStatement.setStatement(currentStatement);
     	
-    	System.out.print("******************** Selecting Source Region: " + selectedStatement);
+    	System.out.print("******************** Selecting Source Region: " + selectedSourceIndexIP);
     	String statementSourceIP = ipAddressMenu.get(String.valueOf(selectedSourceIndexIP));
     	
     	System.out.println("******************** Generated new social media statement... sending");

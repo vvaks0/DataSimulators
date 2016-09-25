@@ -25,6 +25,7 @@ public class SocialMediaEmulator implements Runnable {
     private Map <String, StatementConstructor> statement = new HashMap<String, StatementConstructor>();
     private Map <String, String> brand = new HashMap<String, String>();
     private Map <String, String> category = new HashMap<String, String>();
+    private Map <String, String> ipAddressMenu = new HashMap<String, String>();
     
     Random random = new Random();
     
@@ -60,6 +61,7 @@ public class SocialMediaEmulator implements Runnable {
     	int selectedStatement = random.nextInt(11-1) + 1;
     	int selectedBrand = random.nextInt(3-1) + 1;
     	int selectedCategory = random.nextInt(6-1) + 1;
+    	int selectedSourceIndexIP = random.nextInt(6-1) + 1;
     	
     	System.out.print("******************** Selecting Statement: " + selectedStatement);
     	StatementConstructor socialStatement = statement.get(String.valueOf(selectedStatement));
@@ -79,8 +81,12 @@ public class SocialMediaEmulator implements Runnable {
     	}
     	
     	socialStatement.setStatement(currentStatement);
+    	
+    	System.out.print("******************** Selecting Source Region: " + selectedStatement);
+    	String statementSourceIP = ipAddressMenu.get(String.valueOf(selectedSourceIndexIP));
+    	
     	System.out.println("******************** Generated new social media statement... sending");
-    	sendStatus(String.join(" ", currentStatement));
+    	sendStatus(String.join(" ", currentStatement), statementSourceIP);
     }
     
     public void runTrainingCycle(Integer incident) throws InterruptedException{
@@ -133,6 +139,12 @@ public class SocialMediaEmulator implements Runnable {
         		new String[]{null,"always seems to be trying to rip me off when I shop for", null}, 
         		new String[]{"brand","category"}));
         
+        this.ipAddressMenu.put("1", "24.103.0.35");     //New York, NY
+        this.ipAddressMenu.put("2", "24.104.63.78");    //Philadelphia, PA
+        this.ipAddressMenu.put("3", "67.175.140.166");  //Chicago, IL
+        this.ipAddressMenu.put("4", "67.180.8.157");  	//San Francisco, CA
+        this.ipAddressMenu.put("5", "67.200.144.44");  	//Houston, TX
+        
         if(mode.equalsIgnoreCase("training")){	
         	this.mode = mode;
         	System.out.print("******************** Training Mode");
@@ -143,12 +155,12 @@ public class SocialMediaEmulator implements Runnable {
         }	
     }
     
-    public void sendStatus(String statementBody){
+    public void sendStatus(String statementBody, String statementSourceIP){
     	Date date = new Date();
     	SocialMediaStatement socialMediaStatment = new SocialMediaStatement();
     	socialMediaStatment.setEventTimeStamp(String.valueOf(date.getTime()));
     	socialMediaStatment.setStatement(statementBody);
-    	socialMediaStatment.setIpAddress("");
+    	socialMediaStatment.setIpAddress(statementSourceIP);
     	socialMediaStatment.setLatitude("");
     	socialMediaStatment.setLongitude("");
     	

@@ -50,7 +50,6 @@ public class SocialMediaEmulator implements Runnable {
     				runTrainingCycle(incident);
     			else
     				runSimulationCycle(incident);
-    			
     		} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -87,6 +86,7 @@ public class SocialMediaEmulator implements Runnable {
     	
     	System.out.println("******************** Generated new social media statement... sending");
     	sendStatus(String.join(" ", currentStatement), statementSourceIP);
+    	Thread.sleep(1000);
     }
     
     public void runTrainingCycle(Integer incident) throws InterruptedException{

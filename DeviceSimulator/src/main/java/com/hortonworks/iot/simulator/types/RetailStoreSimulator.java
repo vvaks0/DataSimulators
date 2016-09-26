@@ -205,7 +205,7 @@ public class RetailStoreSimulator implements Runnable {
     	System.out.println("Report Financial Transaction");
     	customerSelection = ((Integer)(random.nextInt(6-1) + 1)).toString();
     	currentCustomer = customers.get(customerSelection);
-        shipToState = shippingInfo.get(random.nextInt(6-1) + 1).toString();
+        shipToState = shippingInfo.get(((Integer)(random.nextInt(6-1) + 1)).toString());
     	sendTransaction();
         Thread.sleep(1000);
     }

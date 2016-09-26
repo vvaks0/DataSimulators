@@ -141,9 +141,9 @@ public class SocialMediaEmulator implements Runnable {
         
         this.ipAddressMenu.put("1", "24.103.0.35");     //New York, NY
         this.ipAddressMenu.put("2", "24.104.63.78");    //Philadelphia, PA
-        this.ipAddressMenu.put("3", "67.175.140.166");  //Chicago, IL
+        this.ipAddressMenu.put("3", "184.154.83.119");  //Chicago, IL
         this.ipAddressMenu.put("4", "67.180.8.157");  	//San Francisco, CA
-        this.ipAddressMenu.put("5", "67.200.144.44");  	//Houston, TX
+        this.ipAddressMenu.put("5", "129.7.135.130");  	//Houston, TX
         
         if(mode.equalsIgnoreCase("training")){	
         	this.mode = mode;

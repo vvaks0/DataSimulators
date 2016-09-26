@@ -27,6 +27,7 @@ public class RetailStoreSimulator implements Runnable {
     private String state; 
     private String status;
     private String mode;
+    private String shipToState; 
 	
 	private Product currentProduct = new Product();
 	private Customer currentCustomer = new Customer();
@@ -37,6 +38,7 @@ public class RetailStoreSimulator implements Runnable {
     private Map<String, String> productDirectory = new HashMap<String, String>();
     private Map<String, Product> inventory = new HashMap<String, Product>();
     private Map<String, Customer> customers = new HashMap<String, Customer>();
+    private Map<String, String> shippingInfo = new HashMap<String, String>();
     
     Random random = new Random();
     
@@ -106,6 +108,12 @@ public class RetailStoreSimulator implements Runnable {
         this.customers.put("4",new Customer("09876","VISA"));
         this.customers.put("5",new Customer("11111","AMEX"));
         
+        this.shippingInfo.put("1", "NY");
+        this.shippingInfo.put("2", "PA");
+        this.shippingInfo.put("3", "IL");
+        this.shippingInfo.put("4", "CA");
+        this.shippingInfo.put("5", "TX");
+        
         if(mode.equalsIgnoreCase("training")){	
         	this.mode = mode;
         	System.out.print("******************** Training Mode");
@@ -122,7 +130,6 @@ public class RetailStoreSimulator implements Runnable {
     	List<String> productList = new ArrayList<String>();
     	productList.add(currentProduct.getProductId());
     	
-    	
     	StoreTransaction storeTransaction = new StoreTransaction();
     	storeTransaction.setAmount(0.0);
     	storeTransaction.setSerialNumber(serialNumber);
@@ -137,6 +144,7 @@ public class RetailStoreSimulator implements Runnable {
     	storeTransaction.setIsCardPresent("true");
     	storeTransaction.setIpAddress("n/a");
     	storeTransaction.setTransactionTimeStamp(transactionTimeStamp);
+    	storeTransaction.setShipToState(shipToState);
     	
         try{
         	URL url = new URL("http://" + targetIP + ":8082/contentListener");
@@ -197,7 +205,8 @@ public class RetailStoreSimulator implements Runnable {
     	System.out.println("Report Financial Transaction");
     	customerSelection = ((Integer)(random.nextInt(6-1) + 1)).toString();
     	currentCustomer = customers.get(customerSelection);
-        sendTransaction();
+        shipToState = shippingInfo.get(random.nextInt(6-1) + 1).toString();
+    	sendTransaction();
         Thread.sleep(1000);
     }
     

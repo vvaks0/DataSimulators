@@ -27,10 +27,7 @@ public class RetailStoreSimulator implements Runnable {
     private String state; 
     private String status;
     private String mode;
-    private String shipToState; 
-	
-	private Product currentProduct = new Product();
-	private Customer currentCustomer = new Customer();
+    private String shipToState;
     
     private String externalCommand;
     private Integer cyclesCompleted = 0;
@@ -86,9 +83,9 @@ public class RetailStoreSimulator implements Runnable {
         status = "normal";
         externalCommand = "none";
         
-        this.inventory.put("11",new Product("11","Electronics","TV","Samsung","X101","2000.00"));
-        this.inventory.put("12",new Product("12","Electronics","DVD-Player","LG","J202","500.00"));
-        this.inventory.put("13",new Product("13","Electronics","Sound System","Sony","C303","1000.00"));
+        this.inventory.put("11",new Product("11","Electronics","TV","Samsung","X101","1000.00"));
+        this.inventory.put("12",new Product("12","Electronics","DVD-Player","LG","J202","250.00"));
+        this.inventory.put("13",new Product("13","Electronics","Sound System","Sony","C303","500.00"));
         this.inventory.put("21",new Product("21","Movie","Action","NA","Gladiator", "20.00"));
         this.inventory.put("22",new Product("22","Movie","Comedy","NA","Wedding Crashers","22.00"));
         this.inventory.put("23",new Product("23","Movie","Drama","NA","Peeky Blinders","23.00"));
@@ -124,21 +121,18 @@ public class RetailStoreSimulator implements Runnable {
         }	
     }
     
-    public void sendTransaction(){
+    public void sendTransaction(Customer currentCustomer, List<String> productList, Double totalAmount){
     	String transactionTimeStamp = ((Long)Calendar.getInstance().getTimeInMillis()).toString();
     	String transactionId = serialNumber + transactionTimeStamp;
-    	List<String> productList = new ArrayList<String>();
-    	productList.add(currentProduct.getProductId());
     	
     	StoreTransaction storeTransaction = new StoreTransaction();
-    	storeTransaction.setAmount(0.0);
+    	storeTransaction.setAmount(totalAmount);
     	storeTransaction.setSerialNumber(serialNumber);
     	storeTransaction.setState(state);
     	storeTransaction.setStatus(status);
     	storeTransaction.setAccountNumber(currentCustomer.getAccountNumber());
     	storeTransaction.setAccountType(currentCustomer.getAccountType());
     	storeTransaction.setTransactionId(transactionId);
-    	storeTransaction.setAmount(storeTransaction.getAmount() + Double.valueOf(currentProduct.getPrice()));
     	storeTransaction.setItems(productList);
     	storeTransaction.setCurrency("dollars");
     	storeTransaction.setIsCardPresent("true");
@@ -161,13 +155,12 @@ public class RetailStoreSimulator implements Runnable {
             if (conn.getResponseCode() != 200) {
     			throw new RuntimeException("Failed : HTTP error code : "+ conn.getResponseCode());
     		}
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     
-    public void sendInventoryUpdate(){
+    public void sendInventoryUpdate(Product currentProduct){
     	InventoryUpdate inventoryUpdate = new InventoryUpdate();
     	inventoryUpdate.setProductId(currentProduct.getProductId());
     	inventoryUpdate.setLocationId(serialNumber);
@@ -186,7 +179,6 @@ public class RetailStoreSimulator implements Runnable {
             if (conn.getResponseCode() != 200) {
     			throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
     		}
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -195,28 +187,38 @@ public class RetailStoreSimulator implements Runnable {
     public void normalTransaction() throws InterruptedException{
     	String inventorySelection = null;
     	String customerSelection = null;
-    	
+    	Double totalAmount = 0.0;
+    	Product currentProduct = new Product();
+    	Customer currentCustomer = new Customer();
+    	List<String> productList = new ArrayList<String>();
+    	int basketSize = random.nextInt(4-1) + 1;
     	System.out.println("Report Inventory Deduction");
-    	inventorySelection = ((Integer)(random.nextInt(6-1) + 1)).toString() + ((Integer)(random.nextInt(4-1) + 1)).toString() ;
-    	currentProduct = inventory.get(inventorySelection);
-    	sendInventoryUpdate();
+    	
+    	for(int i=0; i<basketSize; i++){
+    		inventorySelection = ((Integer)(random.nextInt(6-1) + 1)).toString() + ((Integer)(random.nextInt(4-1) + 1)).toString() ;
+    		currentProduct = inventory.get(inventorySelection);
+    		totalAmount = totalAmount + Double.valueOf(currentProduct.getPrice());
+    		productList.add(currentProduct.getProductId());
+    		sendInventoryUpdate(currentProduct);
+    	}
     	Thread.sleep(1000);
     	
     	System.out.println("Report Financial Transaction");
     	customerSelection = ((Integer)(random.nextInt(6-1) + 1)).toString();
     	currentCustomer = customers.get(customerSelection);
         shipToState = shippingInfo.get(((Integer)(random.nextInt(6-1) + 1)).toString());
-    	sendTransaction();
+    	sendTransaction(currentCustomer, productList, totalAmount);
         Thread.sleep(1000);
     }
     
     public void inventoryTheft() throws InterruptedException{
     	String inventorySelection = null;
-    
+    	Product currentProduct = new Product();
+
     	System.out.println("Report Inventory Deduction");
     	inventorySelection = ((Integer)(random.nextInt(6-1) + 1)).toString() + ((Integer)(random.nextInt(4-1) + 1)).toString() ;
     	currentProduct = inventory.get(inventorySelection);
-    	sendInventoryUpdate();
+    	sendInventoryUpdate(currentProduct);
     	Thread.sleep(1000);
     }
     

@@ -89,49 +89,49 @@ public class Simulator {
         
         switch(simType + " " + deviceId){
 		case "Technician 1000":
-			deviceNetworkInfoMap.put("port", "8084");
-			break;
-		case "Technician 2000":
-			deviceNetworkInfoMap.put("port", "8086");
-			break;
-		case "Technician 3000":
-			deviceNetworkInfoMap.put("port", "8088");
-			break;
-		case "STB 1000":
-			deviceNetworkInfoMap.put("port", "8085");
-			break;
-		case "STB 2000":
-			deviceNetworkInfoMap.put("port", "8087");
-			break;
-		case "STB 3000":
-			deviceNetworkInfoMap.put("port", "8089");
-			break;
-		case "BioReactor 1000":
-			deviceNetworkInfoMap.put("port", "8085");
-			break;
-		case "BioReactor 2000":
-			deviceNetworkInfoMap.put("port", "8087");
-			break;
-		case "BioReactor 3000":
-			deviceNetworkInfoMap.put("port", "8089");
-			break;
-		case "FiltrationSystem 1000":
 			deviceNetworkInfoMap.put("port", "8070");
 			break;
-		case "FiltrationSystem 2000":
+		case "Technician 2000":
 			deviceNetworkInfoMap.put("port", "8071");
 			break;
-		case "FiltrationSystem 3000":
+		case "Technician 3000":
 			deviceNetworkInfoMap.put("port", "8072");
-		 	break;
-		case "RetailStore 1000":
+			break;
+		case "STB 1000":
 			deviceNetworkInfoMap.put("port", "8073");
 			break;
-		case "RetailStore 2000":
+		case "STB 2000":
 			deviceNetworkInfoMap.put("port", "8074");
 			break;
-		case "RetailStore 3000":
+		case "STB 3000":
 			deviceNetworkInfoMap.put("port", "8075");
+			break;
+		case "BioReactor 1000":
+			deviceNetworkInfoMap.put("port", "8076");
+			break;
+		case "BioReactor 2000":
+			deviceNetworkInfoMap.put("port", "8077");
+			break;
+		case "BioReactor 3000":
+			deviceNetworkInfoMap.put("port", "8078");
+			break;
+		case "FiltrationSystem 1000":
+			deviceNetworkInfoMap.put("port", "8060");
+			break;
+		case "FiltrationSystem 2000":
+			deviceNetworkInfoMap.put("port", "8061");
+			break;
+		case "FiltrationSystem 3000":
+			deviceNetworkInfoMap.put("port", "8062");
+		 	break;
+		case "RetailStore 1000":
+			deviceNetworkInfoMap.put("port", "8063");
+			break;
+		case "RetailStore 2000":
+			deviceNetworkInfoMap.put("port", "8064");
+			break;
+		case "RetailStore 3000":
+			deviceNetworkInfoMap.put("port", "8065");
 			break;
 		case "SocialMedia 1000":
 			break;	

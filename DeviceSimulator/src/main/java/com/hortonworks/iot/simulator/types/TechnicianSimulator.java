@@ -128,6 +128,7 @@ public class TechnicianSimulator implements Runnable {
                 }
             }
         }
+        System.exit(0);
     }
     public void sendTechnicianStatus(){
         System.out.println("Sending Technician Status ************************");

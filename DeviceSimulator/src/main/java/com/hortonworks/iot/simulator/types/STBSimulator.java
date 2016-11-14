@@ -53,6 +53,7 @@ public class STBSimulator implements Runnable {
 				e.printStackTrace();
 			}
     	}
+    	System.exit(0);
     }
     public void runSimulationCycle(Integer incident) throws InterruptedException{
     	if(incident > 3 && cyclesCompleted >= 1 ){

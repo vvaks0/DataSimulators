@@ -151,8 +151,10 @@ public class Simulator {
 		String simType = args[0];
 		String serialNumber = args[1];
 		String mode = args[2];
-		if(args.length > 3){	
+		if(args.length == 4){	
 			targetIP = args[3];
+		}else if(args.length == 5){	
+				targetIP = args[4];
 		}else{
 			targetIP = "sandbox.hortonworks.com";
 		}

@@ -128,6 +128,9 @@ public class Simulator {
 		case "RetailStore 1000":
 			deviceNetworkInfoMap.put("port", "8063");
 			break;
+		case "RetailStore2 1000":
+			deviceNetworkInfoMap.put("port", "8063");
+			break;	
 		case "RetailStore 2000":
 			deviceNetworkInfoMap.put("port", "8064");
 			break;

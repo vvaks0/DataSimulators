@@ -27,6 +27,7 @@ import com.hortonworks.iot.simulator.events.Station;
 import com.hortonworks.iot.simulator.types.BioReactorSimulator;
 import com.hortonworks.iot.simulator.types.FiltrationSystemSimulator;
 import com.hortonworks.iot.simulator.types.RetailStoreSimulator;
+import com.hortonworks.iot.simulator.types.RetailStoreSimulator2;
 import com.hortonworks.iot.simulator.types.STBSimulator;
 import com.hortonworks.iot.simulator.types.SocialMediaEmulator;
 import com.hortonworks.iot.simulator.types.TechnicianSimulator;
@@ -246,6 +247,19 @@ public class Simulator {
 			port =  (String)networkInfo.get("port");
 			
 			RetailStoreSimulator retailStore = new RetailStoreSimulator(serialNumber, mode, targetIP);
+			deviceThread = new Thread(retailStore);
+			deviceThread.setName("Retail Store: " + serialNumber);
+			deviceThread.start();
+        }else if(simType.equalsIgnoreCase("RetailStore2")){			
+			System.out.println("Starting Webservice...");
+			final HttpServer server = startServer(simType, serialNumber);
+			server.start();
+			System.out.println("Starting Retail Store Simulation...");
+			Map networkInfo = getNetworkInfo(serialNumber, simType);
+			ipaddress =  (String)networkInfo.get("ipaddress");
+			port =  (String)networkInfo.get("port");
+			
+			RetailStoreSimulator2 retailStore = new RetailStoreSimulator2(serialNumber, mode, targetIP);
 			deviceThread = new Thread(retailStore);
 			deviceThread.setName("Retail Store: " + serialNumber);
 			deviceThread.start();

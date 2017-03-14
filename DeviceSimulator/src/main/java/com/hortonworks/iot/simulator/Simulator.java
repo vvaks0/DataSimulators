@@ -255,8 +255,8 @@ public class Simulator {
 			deviceThread.start();
         }else if(simType.equalsIgnoreCase("RetailStore2")){			
 			System.out.println("Starting Webservice...");
-			final HttpServer server = startServer(simType, serialNumber);
-			server.start();
+			//final HttpServer server = startServer(simType, serialNumber);
+			//server.start();
 			System.out.println("Starting Retail Store Simulation...");
 			Map networkInfo = getNetworkInfo(serialNumber, simType);
 			ipaddress =  (String)networkInfo.get("ipaddress");

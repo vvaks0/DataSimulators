@@ -106,11 +106,11 @@ public class RetailStoreSimulator2 implements Runnable {
         this.customers.put("4",new Customer("09876","VISA"));
         this.customers.put("5",new Customer("11111","AMEX"));
         
-        this.shippingInfo.put("1", "NY");
-        this.shippingInfo.put("2", "PA");
-        this.shippingInfo.put("3", "IL");
-        this.shippingInfo.put("4", "CA");
-        this.shippingInfo.put("5", "TX");
+        this.shippingInfo.put("1", "US");
+        this.shippingInfo.put("2", "GB");
+        this.shippingInfo.put("3", "CN");
+        this.shippingInfo.put("4", "RU");
+        this.shippingInfo.put("5", "BR");
         
         if(mode.equalsIgnoreCase("training")){	
         	this.mode = mode;
@@ -137,6 +137,7 @@ public class RetailStoreSimulator2 implements Runnable {
     	storeTransaction.setIsCardPresent("true");
     	storeTransaction.setIpAddress("n/a");
     	storeTransaction.setTransactionTimeStamp(transactionTimeStamp);
+    	storeTransaction.setProductId(product.getProductId());
     	storeTransaction.setItemName(product.getItemName());
     	storeTransaction.setItemCategory(product.getItemCategory());
     	storeTransaction.setSubClass(product.getSubClass());

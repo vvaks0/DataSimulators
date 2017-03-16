@@ -12,6 +12,7 @@ public class StoreTransaction2 extends DeviceStatus{
 	private String ipAddress;
 	private String transactionTimeStamp;
 	private String shipToState;
+	private String productId;
 	private String itemCategory;
 	private String subClass;
 	private String itemName;
@@ -95,5 +96,11 @@ public class StoreTransaction2 extends DeviceStatus{
 	}
 	public void setPrice(Double price) {
 		this.price = price;
+	}
+	public String getProductId() {
+		return productId;
+	}
+	public void setProductId(String productId) {
+		this.productId = productId;
 	}
 }

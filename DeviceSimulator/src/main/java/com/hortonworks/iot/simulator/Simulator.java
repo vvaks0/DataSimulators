@@ -26,6 +26,7 @@ import com.hortonworks.iot.simulator.events.ProgramGuide;
 import com.hortonworks.iot.simulator.events.Station;
 import com.hortonworks.iot.simulator.types.BioReactorSimulator;
 import com.hortonworks.iot.simulator.types.FiltrationSystemSimulator;
+import com.hortonworks.iot.simulator.types.HistorianSimulator;
 import com.hortonworks.iot.simulator.types.RetailStoreSimulator;
 import com.hortonworks.iot.simulator.types.RetailStoreSimulator2;
 import com.hortonworks.iot.simulator.types.STBSimulator;
@@ -62,6 +63,9 @@ public class Simulator {
     		config = new ResourceConfig(TechnicianService.class);
     	}
     	else if(simType.equalsIgnoreCase("RetailStore")){
+    		config = new ResourceConfig(RetailStoreSimulator.class);
+    	}
+    	else if(simType.equalsIgnoreCase("Historian")){
     		config = new ResourceConfig(RetailStoreSimulator.class);
     	}
     	else{
@@ -138,6 +142,8 @@ public class Simulator {
 			deviceNetworkInfoMap.put("port", "8065");
 			break;
 		case "SocialMedia 1000":
+			break;
+		case "Historian 1000":
 			break;	
 		default:
 			System.out.println("There is no record of " + simType + " " + deviceId + ". Cannot start device simulation");
@@ -278,6 +284,19 @@ public class Simulator {
 			SocialMediaEmulator socialMedia = new SocialMediaEmulator(serialNumber, mode, targetIP);
 			deviceThread = new Thread(socialMedia);
 			deviceThread.setName("Social Media Emulator: " + serialNumber);
+			deviceThread.start();
+        }else if(simType.equalsIgnoreCase("Historian")){			
+			System.out.println("Starting Webservice...");
+			//final HttpServer server = startServer(simType, serialNumber);
+			//server.start();
+			System.out.println("Starting Historian Emulator...");
+			Map networkInfo = getNetworkInfo(serialNumber, simType);
+			ipaddress =  (String)networkInfo.get("ipaddress");
+			port =  (String)networkInfo.get("port");
+			
+			HistorianSimulator historian = new HistorianSimulator(serialNumber, mode, targetIP);
+			deviceThread = new Thread(historian);
+			deviceThread.setName("historian Emulator: " + serialNumber);
 			deviceThread.start();
         }
     }

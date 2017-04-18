@@ -86,9 +86,10 @@ public class HistorianSimulator implements Runnable {
         this.targetIP = targetIP;
         state = "off";
         status = "normal";
-        functionType.put(1,"Sine");
-        functionType.put(2,"Random");
-        functionType.put(3,"Ramp");
+        functionType.put(1,"rpm_truck_a");
+        functionType.put(2,"rpm_truck_b");
+        functionType.put(3,"mpg_truck_a");
+        functionType.put(4,"mpg_truck_b");
         externalCommand = "none";
         if(mode.equalsIgnoreCase("training")){	
         	this.mode = mode;
@@ -110,7 +111,7 @@ public class HistorianSimulator implements Runnable {
         historianEvent.setValue(value);
         
         try{
-        	URL url = new URL("http://" + targetIP + ":8082/contentListener");
+        	URL url = new URL("http://" + targetIP + ":8084/contentListener");
     		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
     		conn.setDoOutput(true);
     		conn.setRequestMethod("POST");
@@ -136,7 +137,7 @@ public class HistorianSimulator implements Runnable {
     	System.out.println("Starting New Normal Cycle");
     	for(int i=0; i<30; i++){
     		timestamp = System.currentTimeMillis();
-    		function = functionType.get(random.nextInt(4-1)+1);
+    		function = functionType.get(random.nextInt(5-1)+1);
     		value = (random.nextDouble());
         	sendStatus();
             Thread.sleep(500);

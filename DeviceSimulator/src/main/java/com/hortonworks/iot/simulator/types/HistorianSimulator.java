@@ -61,9 +61,9 @@ public class HistorianSimulator implements Runnable {
     	System.exit(0);
     }
     public void runSimulationCycle(Integer incident) throws InterruptedException{
-    	if(incident > 3 && cyclesCompleted >= 1 && 0==1 ){
+    	if(incident > 4 && cyclesCompleted >= 1 ){
 			tempFailCycle();
-			powerOff();
+			//powerOff();
 		}else{
 			normalCycle();
 			cyclesCompleted++;
@@ -134,10 +134,22 @@ public class HistorianSimulator implements Runnable {
     }
     
     public void normalCycle() throws InterruptedException{
-    	System.out.println("Starting New Normal Cycle");
-    	for(int i=0; i<30; i++){
+    	System.out.println("Starting New Random Cycle -> http://" + targetIP + ":8084/contentListener");
+    	for(int i=0; i<60; i++){
     		timestamp = System.currentTimeMillis();
-    		function = functionType.get(random.nextInt(5-1)+1);
+    		function = functionType.get(1);
+    		value = (random.nextDouble());
+        	sendStatus();
+        	timestamp = System.currentTimeMillis();
+    		function = functionType.get(2);
+    		value = (random.nextDouble());
+        	sendStatus();
+        	timestamp = System.currentTimeMillis();
+    		function = functionType.get(3);
+    		value = (random.nextDouble());
+        	sendStatus();
+        	timestamp = System.currentTimeMillis();
+    		function = functionType.get(4);
     		value = (random.nextDouble());
         	sendStatus();
             Thread.sleep(500);
@@ -145,15 +157,25 @@ public class HistorianSimulator implements Runnable {
     }
     
     public void tempFailCycle() throws InterruptedException{
-    	System.out.println("Starting New TempFail Cycle");
-    	for(int i=0; i<30; i++){
-    		if(i==0){
-    			setValue(random.nextDouble());
+    	System.out.println("Starting New Pattern Cycle -> http://" + targetIP + ":8084/contentListener");
+    	for(int i=0; i<400; i++){
+    		if(i<100){
+    			value = 0.25;
+    		}else if(i>=100 && i<200){
+    			value = 0.50;
+    		}else if(i>=200 && i<300){
+    			value = 0.75;
+    		}else if(i>=300 && i<400){
+    			value = 0.50;
     		}
-    		else{
-    			setValue(random.nextDouble());
-    		}
-    		
+    		timestamp = System.currentTimeMillis();
+    		function = functionType.get(1);
+    		sendStatus();
+    		function = functionType.get(2);
+    		sendStatus();
+    		function = functionType.get(3);
+    		sendStatus();
+    		function = functionType.get(4);
     		sendStatus();
             Thread.sleep(500);
     	}

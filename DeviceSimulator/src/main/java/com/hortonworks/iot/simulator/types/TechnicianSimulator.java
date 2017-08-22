@@ -143,7 +143,7 @@ public class TechnicianSimulator implements Runnable {
         //technicianSpout.enqueueEvent(technicianStatus);
         
         try{
-        	URL url = new URL("http://" + targetIP + ":8082/contentListener");
+        	URL url = new URL("http://" + targetIP + ":8084/contentListener");
     		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
     		conn.setDoOutput(true);
     		conn.setRequestMethod("POST");

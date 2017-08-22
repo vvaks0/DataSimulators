@@ -56,6 +56,7 @@ public class STBSimulator implements Runnable {
     	System.exit(0);
     }
     public void runSimulationCycle(Integer incident) throws InterruptedException{
+    	
     	if(incident > 3 && cyclesCompleted >= 1 ){
 			tempFailCycle();
 			powerOff();
@@ -81,7 +82,7 @@ public class STBSimulator implements Runnable {
         this.serialNumber = deviceSerialNumber; //deviceSpout.getSerialNumber();
         this.targetIP = targetIP;
         state = "off";
-        status = "normal";
+        status = "reset";
         signalStrength = 85;
         internalTemp = 80;
         externalCommand = "none";
@@ -104,7 +105,7 @@ public class STBSimulator implements Runnable {
         stbStatus.setSignalStrength(signalStrength);
         
         try{
-        	URL url = new URL("http://" + targetIP + ":8082/contentListener");
+        	URL url = new URL("http://" + targetIP + ":8084/contentListener");
     		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
     		conn.setDoOutput(true);
     		conn.setRequestMethod("POST");
@@ -129,6 +130,11 @@ public class STBSimulator implements Runnable {
     public void normalCycle() throws InterruptedException{
     	System.out.println("Starting New Normal Cycle");
     	for(int i=0; i<30; i++){
+        	if(cyclesCompleted == 0 && i == 0){
+        		status = "reset";
+        	}else{
+        		status = "normal";
+        	}
     		signalStrength = random.nextInt(95-85) + 85;
         	internalTemp = random.nextInt(95-80) + 80;
         	sendStatus();
